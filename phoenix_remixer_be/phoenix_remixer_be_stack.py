@@ -1,24 +1,15 @@
-from aws_cdk import (
-    aws_iam as iam,
-    aws_sqs as sqs,
-    aws_sns as sns,
-    aws_sns_subscriptions as subs,
-    core
-)
+from aws_cdk import core
+from ec2 import AwsEc2
 
 
 class PhoenixRemixerBeStack(core.Stack):
-
-    def __init__(self, scope: core.Construct, construct_id: str, **kwargs) -> None:
+    def __init__(
+        self,
+        scope: core.Construct,
+        construct_id: str,
+        parameters: dict,
+        **kwargs,
+    ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        queue = sqs.Queue(
-            self, "PhoenixRemixerBeQueue",
-            visibility_timeout=core.Duration.seconds(300),
-        )
-
-        topic = sns.Topic(
-            self, "PhoenixRemixerBeTopic"
-        )
-
-        topic.add_subscription(subs.SqsSubscription(queue))
+        AwsEc2(self).ec2(parameters.get("name"))

@@ -1,27 +1,5 @@
 # Phoenix Remixer Backend
 
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-## Welcome to your CDK Python project!
-
 You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`phoenix_remixer_be_stack`)
 which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
 
@@ -56,6 +34,12 @@ Once the virtualenv is activated, you can install the required dependencies.
 
 ```
 $ pip install -r requirements.txt
+```
+
+Install pre-commit hooks:
+
+```bash
+pre-commit install
 ```
 
 At this point you can now synthesize the CloudFormation template for this code.
