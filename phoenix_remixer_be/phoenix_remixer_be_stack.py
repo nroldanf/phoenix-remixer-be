@@ -30,11 +30,9 @@ class PhoenixRemixerBeStack(core.Stack):
         # Script in S3 as Asset
         dirname = path.dirname(__file__)
         asset = Asset(self, "Asset", path=path.join(dirname, "ec2_asset.py"))
-        _ = ec2.user_data.add_s3_download_command(
+        local_path = ec2.user_data.add_s3_download_command(
             bucket=asset.bucket, bucket_key=asset.s3_object_key
         )
-        # # Userdata executes script from S3
-        # ec2.user_data.add_execute_file_command(
-        #     file_path=local_path
-        #     )
-        # asset.grant_read(ec2.role)
+        # Userdata executes script from S3
+        ec2.user_data.add_execute_file_command(file_path=local_path)
+        asset.grant_read(ec2.role)
