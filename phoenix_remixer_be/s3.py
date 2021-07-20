@@ -34,4 +34,11 @@ class AwsS3:
             lifecycle_rules=lifecycle_rules,
             encryption=s3.BucketEncryption.S3_MANAGED,
         )
+        # add bucket name to outputs
+        core.CfnOutput(
+            self.scope,
+            "downloaded-songs-bucket-name",
+            value=bucket.bucket_name,
+        )
+
         return bucket

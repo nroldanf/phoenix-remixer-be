@@ -1,0 +1,41 @@
+version: 0.2
+
+env:
+  shell: bash
+  variables:
+    DOCKER_FILE_NAME: 'Dockerfile'
+    CONTAINER_TO_RELEASE_NAME: 'remixer'
+    REPOSITORY_URI: 'provided-by-server-environment'
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - IMAGE_URI="${REPOSITORY_URI}:${TAG}"
+  build:
+    commands:
+      - echo "Starting Docker build `date` in `pwd`"
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_URI:latest -f $DOCKER_FILE_NAME .
+      - docker tag $IMAGE_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo "Pushing to repo uri $REPOSITORY_URI"
+      - docker push $IMAGE_URI:latest
+      - docker push $IMAGE_URI:$IMAGE_TAG
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_TO_RELEASE_NAME" "$IMAGE_URI" > imagedefinitions.json
+      - echo "--------BUILD DONE.--------"
+
+artifacts:
+  files:
+    - 'imagedefinitions.json'
+  discard-paths: 'yes'
+
+cache:
+  paths:
+    - '/root/.cache/pip'

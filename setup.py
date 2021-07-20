@@ -22,6 +22,9 @@ setuptools.setup(
         "aws-cdk.aws_s3==1.112.0",
         "aws-cdk.aws-ec2==1.112.0",
         "aws-cdk.aws-kms==1.112.0",
+        "aws-cdk.pipelines==1.112.0",
+        "aws-cdk.aws-codepipeline-actions==1.112.0",
+        " aws-cdk.aws-codepipeline==1.112.0",
     ],
     python_requires=">=3.6",
     classifiers=[

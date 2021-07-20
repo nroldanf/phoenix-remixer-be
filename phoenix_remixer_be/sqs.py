@@ -108,4 +108,6 @@ class AwsSQS:
             retention_period=self.retention_period,
             removal_policy=self.removal_policy,
         )
+        # add queue name to output
+        core.CfnOutput(self.scope, "sqs-queue-name", value=queue.queue_name)
         return queue
